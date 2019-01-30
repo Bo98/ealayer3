@@ -1,5 +1,6 @@
 project (ealayer3)
 cmake_minimum_required (VERSION 2.8)
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 enable_testing ()
 
 # Set our version number
@@ -8,18 +9,12 @@ set (ealayer3_VERSION_MINOR 7)
 set (ealayer3_VERSION_PATCH 0)
 
 # Find boost and include it
-find_package (Boost 1.36.0 REQUIRED)
+find_package (Boost 1.68.0 REQUIRED)
 include_directories (${Boost_INCLUDE_DIRS})
 
 # Find mpg123 and include it
-find_library (MPG123_LIBRARY
-              NAMES mpg123
-              PATHS /usr/local/lib /usr/lib
-              )
-find_path (MPG123_INCLUDES mpg123.h
-           /usr/local/include /usr/include
-           )
-include_directories (${MPG123_INCLUDES})
+find_package (MPG123 1.25.8 REQUIRED)
+include_directories (${MPG123_INCLUDE_DIRS})
 
 # Configure our version file
 configure_file ("${PROJECT_SOURCE_DIR}/src/Version.h.in"
@@ -62,14 +57,14 @@ set (SOURCE_FILES
     )
 
 add_executable (ealayer3 ${SOURCE_FILES})
-target_link_libraries (ealayer3 ${MPG123_LIBRARY})
+target_link_libraries (ealayer3 ${MPG123_LIBRARIES})
 
 # Add support for tests
 file (GLOB FILES_TO_TEST files/*)
 set (TEST_SOURCE_FILES ${SOURCE_FILES} src/TestDriver.cpp)
 list (REMOVE_ITEM TEST_SOURCE_FILES src/Main.cpp)
 add_executable (ealayer3testdriver ${TEST_SOURCE_FILES})
-target_link_libraries (ealayer3testdriver ${MPG123_LIBRARY})
+target_link_libraries (ealayer3testdriver ${MPG123_LIBRARIES})
 
 foreach (TEST_FILE ${FILES_TO_TEST})
     get_filename_component (TEST_NAME ${TEST_FILE} NAME)
@@ -79,9 +74,9 @@ endforeach (TEST_FILE)
 # Install targets
 if (WIN32)
     install (TARGETS ealayer3 DESTINATION .)
-    install (FILES "${PROJECT_SOURCE_DIR}/mpg123license.txt" DESTINATION .)
     install (FILES "${PROJECT_SOURCE_DIR}/license.txt" DESTINATION .)
-    install (FILES "${PROJECT_SOURCE_DIR}/win32/libmpg123.dll" DESTINATION .)
+	install (FILES "${CMAKE_CURRENT_BINARY_DIR}/libmpg123.dll" DESTINATION .)
+	install (FILES "${PROJECT_SOURCE_DIR}/mpg123license.txt" DESTINATION .)
 else (WIN32)
 	include (InstallRequiredSystemLibraries)
     install (TARGETS ealayer3 DESTINATION bin)

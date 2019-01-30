@@ -10,8 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
-
-#include "MyStdInt.h"
+#include <stdint.h>
 
 #include <iostream>
 #include <string>
