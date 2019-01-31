@@ -578,12 +578,12 @@ int Encode(SArguments& Args)
         for (elEncodeInputVector::iterator Iter = InputFiles.begin();
             Iter != InputFiles.end(); ++Iter)
         {
-         elFrame*& LastFrame = Iter->LastFrame;
+            elFrame*& LastFrame = Iter->LastFrame;
             elFrame*& CurrentFrame = Iter->CurrentFrame;
 
             if (LastFrame->Gr[0].Used)
             {
-                if (First)
+                /*if (First)
                 {
                     elUncompressedSampleFrames& Usf = LastFrame->Gr[0].Uncomp;
                     unsigned int TotalCount;
@@ -594,7 +594,7 @@ int Encode(SArguments& Args)
                     memset(Usf.Data.get(), 0, TotalCount * sizeof(short));
 
                     //std::cout << ": " << (void*)LastFrame->Gr[0].Channels << std::endl;
-                }
+                }*/
 
                 Gen.AddFrameFromStream(*LastFrame);
             }
