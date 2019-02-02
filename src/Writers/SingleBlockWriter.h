@@ -12,7 +12,7 @@
 class elSingleBlockWriter : public elBlockWriter
 {
 public:
-    elSingleBlockWriter();
+    elSingleBlockWriter(uint8_t Flag);
     virtual ~elSingleBlockWriter();
 
     /**
@@ -24,4 +24,7 @@ public:
      * Write the next block to the output file.
      */
     virtual void WriteNextBlock(const elBlock& Block, bool LastBlock);
+
+protected:
+    uint8_t m_Flag;
 };

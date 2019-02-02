@@ -31,5 +31,17 @@ public:
     virtual void ListSupportedParsers(std::vector<std::string>& Names) const;
 
 protected:
+    struct Header
+    {
+        uint8_t Compression;
+        uint8_t ChannelValue;
+        uint16_t SampleRate;
+        uint8_t Flags;
+        uint32_t TotalSamples1;
+        uint32_t BlockSize;
+        uint32_t TotalSamples2;
+    };
+    virtual Header ReadHeader();
+
     unsigned int m_Compression;
 };

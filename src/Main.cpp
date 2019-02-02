@@ -66,6 +66,7 @@ struct SArguments
         Offset(0),
         OutputFormat(EOF_AUTO),
         OutputEALayer3(EOEA_HEADERLESS),
+        HeaderFlag(0),
         
         DecodeParser(elFileDecoder::P_AUTO),
         DecodeOutFormat(elFileDecoder::F_AUTO)
@@ -83,6 +84,7 @@ struct SArguments
     std::streamoff Offset;
     EOutputFormat OutputFormat;
     EOutputEALayer3 OutputEALayer3;
+    uint8_t HeaderFlag;
     
     elFileDecoder::Parser DecodeParser;
     elFileDecoder::Format DecodeOutFormat;
@@ -206,6 +208,15 @@ bool ParseArguments(SArguments& Args, unsigned long Argc, char* Argv[])
         {
             Args.OutputEALayer3 = EOEA_HEADERB;
         }
+        else if (Arg == "--header-flag")
+        {
+            if (i >= Argc)
+            {
+                return false;
+            }
+
+            Args.HeaderFlag = atoi(Argv[i++]);
+        }
         else if (Arg == "-E")
         {
             Args.OutputFormat = EOF_EALAYER3;
@@ -227,7 +238,7 @@ void ShowUsage(const std::string& Program)
     std::cout << "  -i, --offset Offset   Specify the offset in the file to begin at." << std::endl;
     std::cout << "  -o, --output File     Specify the output filename (.mp3)." << std::endl;
     std::cout << "  -s, --stream Index    Specify which stream to extract, or all." << std::endl;
-    std::cout << "  -m, --mp3             Output to MP3 (no information loss!)." << std::endl;
+    std::cout << "  -m, --mp3             Output to MP3." << std::endl;
     std::cout << "  -w, --wave            Output to Microsoft WAV." << std::endl;
     std::cout << "  -mc, --multi-wave     Output to a multi-channel Microsoft WAV." << std::endl;
     std::cout << "  --parser5             Force using the version 5 parser." << std::endl;
@@ -236,9 +247,14 @@ void ShowUsage(const std::string& Program)
     std::cout << "  -v, --verbose         Be verbose (useful when streams won't convert)." << std::endl;
     std::cout << "  -b-, --no-banner      Don't show the banner." << std::endl;
     std::cout << std::endl;
+    std::cout << std::endl;
     std::cout << "Encoding: " << Program << " -E InputFile [InputFile2 ...] [Options]" << std::endl;
-    std::cout << "  --single-block        Create a stream to be loaded in memory. " << std::endl;
-    std::cout << "  --header-b            Create a stream in the header B format. " << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --single-block        Create a stream to be loaded in memory." << std::endl;
+    std::cout << "  --header-b            Create a stream in the header B format." << std::endl;
+    std::cout << std::endl;
+    std::cout << "  --header-flag Flag    Specifies the type of single block header (default 0)." << std::endl;
+    std::cout << std::endl;
     std::cout << std::endl;
     std::cout << "If multiple input files are given, they will be be interleaved ";
     std::cout << "into multiple streams" << std::endl << std::endl;
@@ -519,7 +535,7 @@ int Encode(SArguments& Args)
             Writer = make_shared<elHeaderlessWriter>();
         break;
         case EOEA_SINGLEBLOCK:
-            Writer = make_shared<elSingleBlockWriter>();
+            Writer = make_shared<elSingleBlockWriter>(Args.HeaderFlag);
         break;
         case EOEA_HEADERB:
             Writer = make_shared<elHeaderBWriter>();
