@@ -301,8 +301,8 @@ int main(int Argc, char **Argv)
     if (Args.ShowBanner)
     {
         std::cerr << "EA Layer 3 Stream Extractor/Decoder ";
-        std::cerr << ealayer3_VERSION_MAJOR << "." << ealayer3_VERSION_MINOR << "." << ealayer3_VERSION_PATCH;
-        std::cerr << ". Copyright (C) 2010-11, Ben Moench." << std::endl;
+        std::cerr << ealayer3_VERSION_MAJOR << "." << ealayer3_VERSION_MINOR << "." << ealayer3_VERSION_PATCH << "-bo98patch1 (2019-02-02)";
+        std::cerr << ". Copyright (C) 2010-11, Ben Moench. Patched by Bo98." << std::endl;
         std::cerr << std::endl;
     }
 
