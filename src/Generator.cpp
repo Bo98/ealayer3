@@ -83,6 +83,11 @@ bool elGenerator::Generate(elBlock& Block, unsigned int Keep)
                 // Set the block properties
                 Block.SampleRate = Gr.SampleRate;
                 Block.Channels = Gr.Channels;
+
+                if (Keep == 0 && Gr.Uncomp.Count > 0)
+                {
+                    Block.SampleCount = Gr.Uncomp.Count;
+                }
             }
         }
     }

@@ -583,18 +583,18 @@ int Encode(SArguments& Args)
 
             if (LastFrame->Gr[0].Used)
             {
-                /*if (First)
+                if (First && LastFrame->Gr[1].Used)
                 {
-                    elUncompressedSampleFrames& Usf = LastFrame->Gr[0].Uncomp;
+                    elUncompressedSampleFrames& Usf = LastFrame->Gr[1].Uncomp;
                     unsigned int TotalCount;
                     WasUsed = true;
                     Usf.Count = 47;
-                    TotalCount = Usf.Count * LastFrame->Gr[0].Channels;
+                    TotalCount = Usf.Count * LastFrame->Gr[1].Channels;
                     Usf.Data = shared_array<short>(new short[TotalCount]);
                     memset(Usf.Data.get(), 0, TotalCount * sizeof(short));
 
                     //std::cout << ": " << (void*)LastFrame->Gr[0].Channels << std::endl;
-                }*/
+                }
 
                 Gen.AddFrameFromStream(*LastFrame);
             }
