@@ -41,7 +41,7 @@ protected:
         uint32_t BlockSize;
         uint32_t TotalSamples2;
     };
-    virtual Header ReadHeader();
+    virtual Header ReadHeader(bool dontThrow = false);
 
     unsigned int m_Compression;
 };

@@ -31,7 +31,7 @@ bool elSingleBlockLoader::Initialize(std::istream* Input)
 
     const std::streamoff StartOffset = m_Input->tellg();
 
-    Header HeaderRead = ReadHeader();
+    Header HeaderRead = ReadHeader(true);
 
     // Make sure its valid
     if (HeaderRead.Compression < 5 || HeaderRead.Compression > 7)
@@ -64,7 +64,7 @@ bool elSingleBlockLoader::Initialize(std::istream* Input)
     return true;
 }
 
-elSingleBlockLoader::Header elSingleBlockLoader::ReadHeader()
+elSingleBlockLoader::Header elSingleBlockLoader::ReadHeader(bool dontThrow)
 {
     Header HeaderRead = {};
 
@@ -86,7 +86,8 @@ elSingleBlockLoader::Header elSingleBlockLoader::ReadHeader()
     }
     else if (HeaderRead.Flags & 1)
     {
-        throw std::runtime_error("Unsupported single block flag.");
+        if (!dontThrow)
+            throw std::runtime_error("Unsupported single block flag.");
     }
     else if (HeaderRead.Flags & 2)
     {
@@ -168,7 +169,7 @@ shared_ptr<elParser> elSingleBlockLoader::CreateParser() const
     switch (m_Compression)
     {
         case 5:
-           return make_shared<elParser>();
+            return make_shared<elParser>();
         case 6:
         case 7:
             return make_shared<elParserVersion6>();
